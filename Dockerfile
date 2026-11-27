@@ -47,10 +47,10 @@ WORKDIR /var/www/html
 
 # PHP dependencies — copy composer files first for better layer caching.
 # Note: composer.lock is gitignored in this repo, so install resolves from composer.json.
-# --no-audit skips Composer's security-advisory block so the build can proceed;
+# --no-security-blocking skips Composer's security-advisory block so the build can proceed;
 # advisories should be reviewed separately via `composer audit`.
 COPY composer.json ./
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-audit
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-security-blocking
 
 # Application code
 COPY . .
