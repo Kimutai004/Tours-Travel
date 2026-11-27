@@ -3,109 +3,63 @@
 # Deploys ToursTravel Kenya (Laravel) as a Docker web service.
 #
 # HOW TO USE:
-#   1. Create a Render PostgreSQL database: New + → PostgreSQL
-#   2. Push this repo to GitHub.
-#   3. In Render: "New +" → "Blueprint" → connect this repository.
-#      Render will read render.yaml and create the web service.
-#   4. In the Render dashboard → your service → Environment, set the
-#      required variables below (mark secrets as "Secret").
-#   5. Optionally add a Persistent Disk mounted at /var/www/html/storage
-#      so file uploads survive redeploys (add via Render dashboard).
+#   1. Push this repo to GitHub.
+#   2. In Render: "New +" → "Blueprint" → connect this repository.
+#   3. Render will create the web service + PostgreSQL database.
+#   4. Set APP_KEY in the Render dashboard (from `php artisan key:generate --show`).
 # ---------------------------------------------------------------
 
 services:
   - type: web
-    name: tours-travel
-    env: docker
-    region: oregon               # change to your preferred region
-    plan: starter                # starter = 512 MB RAM; use standard for production
+    name: pinacare
+    runtime: docker
+    plan: free
     dockerfilePath: ./Dockerfile
-    dockerContext: ./
-    # Render will expose port 10000; the Dockerfile binds Nginx to $PORT.
+    healthCheckPath: /
     envVars:
-      # --- Application (required) ---
       - key: APP_NAME
-        value: "ToursTravel Kenya"
+        value: PINACARE
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: "false"
       - key: APP_KEY
-        value: "REPLACE_ME"      # <-- SET in Render dashboard (from `php artisan key:generate --show`)
+        sync: false
       - key: APP_URL
-        value: "REPLACE_ME"      # <-- SET after first deploy: https://<service>.onrender.com
-
-      # --- Database (required) ---
-      # Render managed PostgreSQL: New + → PostgreSQL → copy connection info
+        value: https://pinacare.com
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: warning
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        value: "REPLACE_ME"      # <-- SET from Render PostgreSQL dashboard
+        fromDatabase:
+          name: pinacare-db
+          property: host
       - key: DB_PORT
-        value: "5432"
+        fromDatabase:
+          name: pinacare-db
+          property: port
       - key: DB_DATABASE
-        value: "REPLACE_ME"      # <-- SET from Render PostgreSQL dashboard
+        fromDatabase:
+          name: pinacare-db
+          property: database
       - key: DB_USERNAME
-        value: "REPLACE_ME"      # <-- SET from Render PostgreSQL dashboard
+        fromDatabase:
+          name: pinacare-db
+          property: user
       - key: DB_PASSWORD
-        value: "REPLACE_ME"      # <-- SET as Secret in Render dashboard
-
-      # --- Session / Cache / Queue ---
-      - key: SESSION_DRIVER
-        value: database
-      - key: SESSION_LIFETIME
-        value: "120"
+        fromDatabase:
+          name: pinacare-db
+          property: password
       - key: CACHE_DRIVER
         value: file
+      - key: SESSION_DRIVER
+        value: file
       - key: QUEUE_CONNECTION
-        value: database
-      - key: LOG_CHANNEL
-        value: stack
-      - key: LOG_LEVEL
-        value: info
+        value: sync
 
-      # --- Mail (SMTP) ---
-      - key: MAIL_MAILER
-        value: smtp
-      - key: MAIL_HOST
-        value: "smtp.gmail.com"
-      - key: MAIL_PORT
-        value: "587"
-      - key: MAIL_USERNAME
-        value: "REPLACE_ME"      # <-- SET as Secret
-      - key: MAIL_PASSWORD
-        value: "REPLACE_ME"      # <-- SET as Secret
-      - key: MAIL_ENCRYPTION
-        value: tls
-      - key: MAIL_FROM_ADDRESS
-        value: "noreply@tourskenya.com"
-      - key: MAIL_FROM_NAME
-        value: "ToursTravel Kenya"
-
-      # --- Stripe (production keys) ---
-      - key: STRIPE_KEY
-        value: "REPLACE_ME"      # <-- SET as Secret: pk_live_...
-      - key: STRIPE_SECRET
-        value: "REPLACE_ME"      # <-- SET as Secret: sk_live_...
-
-      # --- M-PESA (Safaricom Daraja) ---
-      - key: MPESA_CONSUMER_KEY
-        value: "REPLACE_ME"      # <-- SET as Secret
-      - key: MPESA_CONSUMER_SECRET
-        value: "REPLACE_ME"      # <-- SET as Secret
-      - key: MPESA_BUSINESS_SHORT_CODE
-        value: "REPLACE_ME"
-      - key: MPESA_PASSKEY
-        value: "REPLACE_ME"      # <-- SET as Secret
-      - key: MPESA_CALLBACK_URL
-        value: "REPLACE_ME"      # <-- SET: https://<service>.onrender.com/api
-      - key: MPESA_PRODUCTION
-        value: "false"
-
-# Optional persistent disk for storage (uploads). Uncomment and add via the
-# Render dashboard if you need uploads to survive redeploys:
-#
-#   disks:
-#     - name: tours-travel-storage
-#       mountPath: /var/www/html/storage
-#       sizeGB: 1
+databases:
+  - name: pinacare-db
+    plan: free
