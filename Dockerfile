@@ -48,12 +48,15 @@ WORKDIR /var/www/html
 # PHP dependencies — copy composer files first for better layer caching.
 # Note: composer.lock is gitignored in this repo, so install resolves from composer.json.
 # --no-security-blocking skips Composer's security-advisory block so the build can proceed;
-# advisories should be reviewed separately via `composer audit`.
+# --no-scripts avoids running artisan commands before the app code is copied.
 COPY composer.json ./
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-security-blocking
+RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-autoloader --no-security-blocking
 
 # Application code
 COPY . .
+
+# Complete composer installation (now that artisan exists, package:discover can run)
+RUN composer dump-autoload --optimize
 
 # Production frontend assets built in the previous stage
 COPY --from=frontend /var/www/html/public/css ./public/css
