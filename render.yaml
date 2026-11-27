@@ -26,7 +26,7 @@ services:
       - key: APP_KEY
         sync: false
       - key: APP_URL
-        value: https://tours-travel.onrender.com
+        value: https://tours-travel-xp15.onrender.com
       - key: LOG_CHANNEL
         value: stderr
       - key: LOG_LEVEL
