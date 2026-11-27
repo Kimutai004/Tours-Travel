@@ -17,9 +17,9 @@ Docker web service (PHP-FPM + Nginx in one container, listening on `$PORT`).
 
 1. A GitHub account with this repo pushed.
 2. A Render account (https://render.com).
-3. A MySQL database (Render does **not** offer managed MySQL). Options:
-   - External MySQL: Aiven, DigitalOcean Managed Database, Railway MySQL, etc.
-   - Render managed **PostgreSQL**: change `DB_CONNECTION` to `pgsql` and add the `pdo_pgsql` PHP extension to the `Dockerfile`.
+3. A **PostgreSQL database**. Render offers managed PostgreSQL:
+   - Render dashboard → **New +** → **PostgreSQL** → create a database.
+   - Copy the connection details (host, port, database, user, password) from the Render DB dashboard.
 
 ## Step 1 — Generate `APP_KEY`
 
@@ -85,9 +85,9 @@ APP_DEBUG=false
 APP_KEY=base64:...                    # from `php artisan key:generate --show`
 APP_URL=https://<service>.onrender.com
 
-DB_CONNECTION=mysql
-DB_HOST=<your-mysql-host>
-DB_PORT=3306
+DB_CONNECTION=pgsql
+DB_HOST=<your-postgres-host>
+DB_PORT=5432
 DB_DATABASE=<database>
 DB_USERNAME=<user>
 DB_PASSWORD=<password>

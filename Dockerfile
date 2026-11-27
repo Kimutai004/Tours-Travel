@@ -37,8 +37,9 @@ RUN apk add --no-cache \
     freetype-dev \
     libjpeg-turbo-dev \
     gettext \
+    postgresql-dev \
  && docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip opcache
+ && docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd intl zip opcache
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
