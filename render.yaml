@@ -5,8 +5,10 @@
 # HOW TO USE:
 #   1. Push this repo to GitHub.
 #   2. In Render: "New +" → "Blueprint" → connect this repository.
-#   3. Render will create the web service + PostgreSQL database.
-#   4. Set APP_KEY in the Render dashboard (from `php artisan key:generate --show`).
+#   3. Render will create the web service.
+#   4. Provision an external PostgreSQL database (e.g. Supabase, Neon, Railway).
+#   5. In the Render dashboard → your service → Environment, set the DB_* variables
+#      from your external PostgreSQL provider, plus APP_KEY.
 # ---------------------------------------------------------------
 
 services:
@@ -34,32 +36,18 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        fromDatabase:
-          name: tours-travel-db
-          property: host
+        value: "REPLACE_ME"      # <-- SET from your external PostgreSQL provider
       - key: DB_PORT
-        fromDatabase:
-          name: tours-travel-db
-          property: port
+        value: "5432"
       - key: DB_DATABASE
-        fromDatabase:
-          name: tours-travel-db
-          property: database
+        value: "REPLACE_ME"      # <-- SET from your external PostgreSQL provider
       - key: DB_USERNAME
-        fromDatabase:
-          name: tours-travel-db
-          property: user
+        value: "REPLACE_ME"      # <-- SET from your external PostgreSQL provider
       - key: DB_PASSWORD
-        fromDatabase:
-          name: tours-travel-db
-          property: password
+        value: "REPLACE_ME"      # <-- SET as Secret
       - key: CACHE_DRIVER
         value: file
       - key: SESSION_DRIVER
         value: file
       - key: QUEUE_CONNECTION
         value: sync
-
-databases:
-  - name: tours-travel-db
-    plan: free
