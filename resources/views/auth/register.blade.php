@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', 'Create Account - RockView Kenya')
+@section('title', 'Create Account - RockView Adventures Adventures Kenya')
 
 @section('page')
 <div class="tt-auth-bg">
@@ -78,7 +78,7 @@
         </form>
 
         <div class="text-center mt-4">
-            <small class="text-muted">&copy; {{ date('Y') }} RockView. Your journey begins here.</small>
+            <small class="text-muted">&copy; {{ date('Y') }} RockView Adventures Adventures. Your journey begins here.</small>
         </div>
     </div>
 </div>

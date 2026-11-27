@@ -16,6 +16,8 @@ use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\MpesaPaymentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -95,7 +97,19 @@ Route::get('/checkout', [WelcomeController::class, 'checkout'])->name('checkout'
 
 Route::get('/Checkout', [CheckoutController::class, 'checkout'])->name('checkout.store');
 
-// Post form data
+// Unified payment routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout/payment-method', [PaymentController::class, 'showPaymentMethod'])->name('payment-method');
+    Route::post('/checkout/mpesa-payment', [PaymentController::class, 'mpesaPayment'])->name('mpesa.payment');
+    Route::get('/mpesa/stkpush', [MpesaPaymentController::class, 'index'])->name('mpesa.stkpush');
+    Route::post('/mpesa/stkpush', [MpesaPaymentController::class, 'submit'])->name('mpesa.stkpush.submit');
+    Route::get('/mpesa/stkpush/confirm', [MpesaPaymentController::class, 'confirm'])->name('mpesa.stkpush.confirm');
+    Route::post('/mpesa/callback', [PaymentController::class, 'mpesaCallback'])->name('mpesa.callback');
+    Route::get('/mpesa/verify', [MpesaPaymentController::class, 'verify'])->name('mpesa.verify');
+    Route::get('/payments/success', [PaymentController::class, 'success'])->name('payments.success');
+    Route::get('/payments/history', [PaymentController::class, 'history'])->name('payments.history');
+});
+
 Route::post('/contact', [ContactUsController::class, 'ContactUs'])->name('contact.store');
 
 Route::get('/stripe', [WelcomeController::class, 'stripe'])->name('stripe');

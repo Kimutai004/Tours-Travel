@@ -50,7 +50,7 @@
 							<p>Experience the beauty and culture of {{ $destinations->title }}. Our expert guides will ensure an unforgettable journey.</p>
 							<div class="d-flex flex-wrap gap-3">
 								<a href="{{ route('cart') }}" class="btn-tt-primary">
-									<i class="fas fa-shopping-cart me-2"></i> Add to Cart
+									<i class="fas fa-shopping-cart me-2"></i> Book Now
 								</a>
 								<a href="{{ route('contact') }}" class="btn-tt-outline">
 									<i class="fas fa-phone me-2"></i> Contact Us

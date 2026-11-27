@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -95,7 +95,7 @@
 
             @if (Session::has('success'))
             <div class="alert alert-success text-center">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">Ã—</a>
               <p>{{ Session::get('success') }}</p>
             </div>
             @endif
@@ -103,7 +103,7 @@
             <form role="form" action="{{ route('stripe.post') }}" method="post" class="require-validation"
               data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" id="payment-form">
               @csrf
-
+              <input type="hidden" name="destination_id" value="{{ $destinations->id }}">
 
               <div class='form-row row'>
                 <div class='col-xs-12 form-group required'>

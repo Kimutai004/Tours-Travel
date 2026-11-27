@@ -6,7 +6,7 @@
 			<div class="col-lg-4">
 				<div class="d-flex align-items-center gap-2 mb-3">
 					<div class="brand-icon"><i class="fas fa-globe-africa"></i></div>
-					<h4 class="mb-0">Rock<span class="brand-accent" style="color:var(--tt-accent)">View</span></h4>
+					<h4 class="mb-0">RockView<span class="brand-accent" style="color:var(--tt-accent)">Adventures</span></h4>
 				</div>
 				<p class="mb-3">
 					Your trusted local guide to Kenya's most incredible destinations.
@@ -53,7 +53,7 @@
 				</div>
 				<div class="contact-row">
 					<i class="fas fa-envelope"></i>
-					<span>info@rockview.ke</span>
+					<span>info@RockViewAdventures.ke</span>
 				</div>
 			</div>
 		</div>
@@ -62,7 +62,7 @@
 		<div class="tt-footer-bottom">
 			<div class="row align-items-center">
 				<div class="col-md-6">
-					<p>&copy; {{ date('Y') }} RockView Kenya. All rights reserved.</p>
+					<p>&copy; {{ date('Y') }} RockView Adventures Adventures Kenya. All rights reserved.</p>
 				</div>
 				<div class="col-md-6 text-md-end">
 					<a href="#" class="me-3">Privacy Policy</a>

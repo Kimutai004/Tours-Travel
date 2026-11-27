@@ -9,36 +9,71 @@ use Stripe;
 class StripePaymentController extends Controller
 {
     /**
-     * success response method.
-     *
-     * @return \Illuminate\Http\Response
+     * Display the Stripe payment page.
      */
-    public function stripe()
+    public function stripe(Request $request)
     {
-        return view('stripe');
+        $destination = null;
+        if ($request->has('destination_id')) {
+            $destination = \App\Models\Destinations::find($request->destination_id);
+        }
+
+        return view('stripe', [
+            'destinations' => $destination ?? \App\Models\Destinations::first(),
+        ]);
     }
 
     /**
-     * success response method.
-     *
-     * @return \Illuminate\Http\Response
+     * Process card payment via Stripe.
      */
     public function stripePost(Request $request)
     {
-
-        // getting the logged in customer
-        $customer = Auth::user();
-
-        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-        Stripe\Charge::create([
-            'amount' => 100 * 100,
-            'currency' => 'usd',
-            'source' => $request->stripeToken,
-            'description' => 'STM Jr.',
+        $request->validate([
+            'destination_id' => 'required|exists:destinations,id',
+            'stripeToken' => 'required|string',
+            'email' => 'required|email',
         ]);
 
-        session()->flash('success', 'Your Payment was successful!');
+        $destination = \App\Models\Destinations::findOrFail($request->destination_id);
+        $numericPrice = (int) preg_replace('/[^\d]/', '', $destination->pricing);
+        $amountInCents = $numericPrice * 100;
 
-        return redirect(route('packages'));
+        try {
+            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            $charge = Stripe\Charge::create([
+                'amount' => $amountInCents,
+                'currency' => 'usd',
+                'source' => $request->stripeToken,
+                'description' => "Payment for {$destination->title} by {$request->email}",
+            ]);
+
+            \Illuminate\Support\Facades\DB::transaction(function () use ($request, $destination, $numericPrice, $amountInCents, $charge) {
+                \App\Models\Payment::create([
+                    'user_id' => Auth::id(),
+                    'destination_id' => $destination->id,
+                    'payment_method' => 'card',
+                    'payment_id' => $charge->id,
+                    'user_email' => $request->email,
+                    'amount' => $amountInCents,
+                    'currency' => 'USD',
+                    'status' => 'completed',
+                    'transaction_type' => 'card',
+                    'stripe_token' => $request->stripeToken,
+                    'stripe_charge_id' => $charge->id,
+                    'ip_address' => $request->ip(),
+                ]);
+            });
+
+            $request->session()->flash('success', 'Your card payment was successful!');
+
+            return redirect()->route('payments.success')
+                ->with('payment_id', $charge->id)
+                ->with('payment_method', 'card')
+                ->with('amount', $amountInCents / 100)
+                ->with('destination_title', $destination->title);
+        } catch (\Exception $e) {
+            $request->session()->flash('error', 'Card payment failed: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

@@ -1,0 +1,111 @@
+# ---------------------------------------------------------------
+# Render Infrastructure-as-Code
+# Deploys ToursTravel Kenya (Laravel) as a Docker web service.
+#
+# HOW TO USE:
+#   1. Push this repo to GitHub.
+#   2. In Render: "New +" → "Blueprint" → connect this repository.
+#      Render will read render.yaml and create the web service.
+#   3. Fill in the required environment variables (see RENDER_DEPLOY.md).
+#   4. Optionally add a Persistent Disk mounted at /var/www/html/storage
+#      so file uploads survive redeploys (add via Render dashboard).
+# ---------------------------------------------------------------
+
+services:
+  - type: web
+    name: tours-travel
+    env: docker
+    region: oregon               # change to your preferred region
+    plan: starter                # starter = 512 MB RAM; use standard for production
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    # Render will expose port 10000; the Dockerfile binds Nginx to $PORT.
+    envVars:
+      # --- Application (required) ---
+      - key: APP_NAME
+        value: "ToursTravel Kenya"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        value: "BASE64_APP_KEY_GENERATED_BY_php_artisan_key_generate"  # <-- REPLACE ME
+      - key: APP_URL
+        value: "https://tours-travel.onrender.com"  # <-- update after first deploy
+
+      # --- Database (required) ---
+      # Render does not offer managed MySQL. Use an external MySQL provider
+      # (e.g. Aiven, DigitalOcean DB, Railway MySQL) or switch to Render's
+      # managed PostgreSQL (change DB_CONNECTION to pgsql + install pdo_pgsql).
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: "YOUR_MYSQL_HOST"          # <-- REPLACE ME
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        value: "YOUR_MYSQL_DATABASE"      # <-- REPLACE ME
+      - key: DB_USERNAME
+        value: "YOUR_MYSQL_USER"          # <-- REPLACE ME
+      - key: DB_PASSWORD
+        value: "YOUR_MYSQL_PASSWORD"      # <-- REPLACE ME (set as Secret in Render)
+
+      # --- Session / Cache / Queue ---
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: "120"
+      - key: CACHE_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: info
+
+      # --- Mail (SMTP) ---
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        value: "smtp.gmail.com"
+      - key: MAIL_PORT
+        value: "587"
+      - key: MAIL_USERNAME
+        value: "YOUR_EMAIL@gmail.com"     # <-- REPLACE ME
+      - key: MAIL_PASSWORD
+        value: "YOUR_APP_PASSWORD"        # <-- REPLACE ME (Secret)
+      - key: MAIL_ENCRYPTION
+        value: tls
+      - key: MAIL_FROM_ADDRESS
+        value: "noreply@tourskenya.com"
+      - key: MAIL_FROM_NAME
+        value: "ToursTravel Kenya"
+
+      # --- Stripe (production keys) ---
+      - key: STRIPE_KEY
+        value: "pk_live_..."              # <-- REPLACE ME (Secret)
+      - key: STRIPE_SECRET
+        value: "sk_live_..."              # <-- REPLACE ME (Secret)
+
+      # --- M-PESA (Safaricom Daraja) ---
+      - key: MPESA_CONSUMER_KEY
+        value: "YOUR_KEY"                 # <-- REPLACE ME (Secret)
+      - key: MPESA_CONSUMER_SECRET
+        value: "YOUR_SECRET"              # <-- REPLACE ME (Secret)
+      - key: MPESA_BUSINESS_SHORT_CODE
+        value: "YOUR_SHORT_CODE"          # <-- REPLACE ME
+      - key: MPESA_PASSKEY
+        value: "YOUR_PASSKEY"             # <-- REPLACE ME (Secret)
+      - key: MPESA_CALLBACK_URL
+        value: "https://tours-travel.onrender.com/api"
+      - key: MPESA_PRODUCTION
+        value: "false"
+
+# Optional persistent disk for storage (uploads). Uncomment and add via the
+# Render dashboard if you need uploads to survive redeploys:
+#
+#   disks:
+#     - name: tours-travel-storage
+#       mountPath: /var/www/html/storage
+#       sizeGB: 1

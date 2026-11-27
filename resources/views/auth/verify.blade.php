@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', 'Verify Email - RockView Kenya')
+@section('title', 'Verify Email - RockView Adventures Adventures Kenya')
 
 @section('page')
 <div class="tt-auth-bg">
@@ -36,7 +36,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <small class="text-muted">&copy; {{ date('Y') }} RockView. Secure email verification.</small>
+            <small class="text-muted">&copy; {{ date('Y') }} RockView Adventures Adventures. Secure email verification.</small>
         </div>
     </div>
 </div>

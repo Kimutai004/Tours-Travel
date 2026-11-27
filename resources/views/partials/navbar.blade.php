@@ -5,7 +5,7 @@
 			<div class="brand-icon">
 				<i class="fas fa-globe-africa"></i>
 			</div>
-			<span>Rock<span class="brand-accent">View</span></span>
+			<span>RockView<span class="brand-accent">Adventures</span></span>
 		</a>
 
 		<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#ttNav"

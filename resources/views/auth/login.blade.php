@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', 'Sign In - RockView Kenya')
+@section('title', 'Sign In - RockView Adventures Adventures Kenya')
 
 @section('page')
 <div class="tt-auth-bg">
@@ -51,7 +51,7 @@
             </button>
 
             <div class="text-center my-3">
-                <small class="text-muted">New to RockView Kenya?</small>
+                <small class="text-muted">New to RockView Adventures Adventures Kenya?</small>
             </div>
 
             <a href="{{ route('register') }}" class="btn-tt-outline w-100 text-center d-block">
@@ -60,7 +60,7 @@
         </form>
 
         <div class="text-center mt-4">
-            <small class="text-muted">&copy; {{ date('Y') }} RockView. Experience Kenya differently.</small>
+            <small class="text-muted">&copy; {{ date('Y') }} RockView Adventures Adventures. Experience Kenya differently.</small>
         </div>
     </div>
 </div>

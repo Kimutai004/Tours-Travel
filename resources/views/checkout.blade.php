@@ -104,12 +104,12 @@
 
 					<p class="text-muted small mb-3"><i class="fas fa-info-circle me-1"></i> Can't wait to start your vacation?</p>
 
-					<a href="{{ route('stripe') }}" class="btn-tt-accent w-100 text-center d-block">
+					<a href="{{ route('payment-method') }}" class="btn-tt-accent w-100 text-center d-block">
 						<i class="fas fa-lock me-2"></i> Proceed to Pay
 					</a>
 
 					<div class="text-center mt-3">
-						<small class="text-muted"><i class="fas fa-shield-alt me-1"></i> Secure payments powered by Stripe</small>
+						<small class="text-muted"><i class="fas fa-shield-alt me-1"></i> Secure payments powered by M-PESA & Stripe</small>
 					</div>
 				</div>
 			</div>
