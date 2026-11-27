@@ -36,15 +36,15 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        value: "REPLACE_ME"      # <-- SET from your external PostgreSQL provider
+        value: "db.ikbzpkswgvpwpheyafbv.supabase.co"
       - key: DB_PORT
         value: "5432"
       - key: DB_DATABASE
-        value: "REPLACE_ME"      # <-- SET from your external PostgreSQL provider
+        value: "postgres"
       - key: DB_USERNAME
-        value: "REPLACE_ME"      # <-- SET from your external PostgreSQL provider
+        value: "postgres"
       - key: DB_PASSWORD
-        value: "REPLACE_ME"      # <-- SET as Secret
+        value: "REPLACE_ME"      # <-- SET as Secret in Render dashboard (your Supabase password)
       - key: CACHE_DRIVER
         value: file
       - key: SESSION_DRIVER
